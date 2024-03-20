@@ -12,9 +12,6 @@ variables:
   tag: '$(Build.BuildId)'
   TF_ROOT: ./weatherapi
 
-before_script:
-  - cd $TF_ROOT
-
 stages:
 - stage: Build
   displayName: Build image
@@ -32,9 +29,6 @@ stages:
         Dockerfile: '**/Dockerfile'
         tags: |
           $(tag)
-  artifacts:
-    paths:
-      - $TF_ROOT
 - stage: Provision
   displayName: 'Terraforming on Azure...'
   dependsOn: Build
@@ -47,6 +41,7 @@ stages:
     - group: TerraformEnvVars
     steps:
     - script: |
+        cd ./weatherapi
         set -e 
 
         terraform init -input=false
@@ -57,8 +52,5 @@ stages:
         ARM_CLIENT_ID: $(ARM_CLIENT_ID)
         ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
         ARM_TENANT_ID: $(ARM_TENANT_ID)
-        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID) 
-  artifacts:
-    paths:
-      - $TF_ROOT
+        ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
     
