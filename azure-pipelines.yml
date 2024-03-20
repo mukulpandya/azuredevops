@@ -10,6 +10,10 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
+  TF_ROOT: ./weatherapi
+
+before_script:
+  - cd $TF_ROOT
 
 stages:
 - stage: Build
@@ -28,6 +32,9 @@ stages:
         Dockerfile: '**/Dockerfile'
         tags: |
           $(tag)
+  artifacts:
+    paths:
+      - $TF_ROOT
 - stage: Provision
   displayName: 'Terraforming on Azure...'
   dependsOn: Build
@@ -51,4 +58,7 @@ stages:
         ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
         ARM_TENANT_ID: $(ARM_TENANT_ID)
         ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID) 
+  artifacts:
+    paths:
+      - $TF_ROOT
     
