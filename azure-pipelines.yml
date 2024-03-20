@@ -29,11 +29,11 @@ stages:
         tags: |
           $(tag)
 - stage: Provision
-  displayname: 'Terraforming on Azure...'
+  displayName: 'Terraforming on Azure...'
   dependsOn: Build
   jobs:
   - job: Provision
-    displayname: 'Provisioning Container Instance'
+    displayName: 'Provisioning Container Instance'
     pool:
       vmImage: ubuntu-latest
     variables:
